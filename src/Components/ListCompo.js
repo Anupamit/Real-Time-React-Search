@@ -1,22 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react';
 
 const ListCompo = ({data}) => {
-    let [search, setSearch]=useState('')
-    const iterate = (array) => {
-        return array.map((arrayItem) => {
-          return <li>{arrayItem}</li>;
-        });
-      };
-      let handleSearch = (e) => {
-        setSearch(e.target.value);
-      };
-      let list = data;
-      let searchStr = search.trim().toLowerCase();
-      if (searchStr.length > 0) {
-        list = list.filter((letter) => {
-          return letter.toLowerCase().match(searchStr);
-        });
-      }
+  const [search, setSearch] = useState('');
+
+  const filteredList = useMemo(() => {
+    let list = data;
+    let searchStr = search.trim().toLowerCase();
+    if (searchStr.length > 0) {
+      list = list.filter((letter) => {
+        return letter.toLowerCase().indexOf(searchStr) !== -1;
+      });
+    }
+    return list;
+  }, [data, search]);
+
+  const iterate = (array) => {
+    return array.map((arrayItem) => {
+      return <li>{arrayItem}</li>;
+    });
+  };
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+  };
+
   return (
     <div>
       <h3>Search:</h3>
@@ -26,9 +33,9 @@ const ListCompo = ({data}) => {
         onChange={handleSearch}
         placeholder="Search the name from list"
       />
-      <ul>{iterate(list)}</ul>
+      <ul>{iterate(filteredList)}</ul>
     </div>
-  )
+  );
 }
 
-export default ListCompo
+export default ListCompo;

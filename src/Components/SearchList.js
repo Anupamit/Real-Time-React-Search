@@ -11,7 +11,6 @@ const SearchList = () => {
       );
       let data = await response.json();
       setData(data.Reggae);
-      console.log(data.Reggae[2]);
     };
     fetchData();
   }, []);
